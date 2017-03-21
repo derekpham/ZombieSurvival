@@ -1,0 +1,15 @@
+Entity:
+    Posn pos;
+    int level;
+    int hp;
+    double dir;
+    int dmg;
+    int sightRadius;
+    int attackRadius;
+
+Player:
+      this.hp = 100 + this.level * 25;
+      this.numAmmos = 50 + this.level * 5;
+      this.sightRadius = 50 + this.level * 2;
+      this.attackRadius = 5 + this.level;
+      this.dmg = 5 + this.level;
