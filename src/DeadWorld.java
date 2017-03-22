@@ -80,7 +80,13 @@ public class DeadWorld extends World {
     }
   }
 
-  void onKeyEvent() {
-
+  public void onKeyEvent(String key) {
+    if(key.equals("r")) {
+      // restart world
+    } else {
+      this.player.inputMove(key, this.obstacles);
+    }
   }
+
+  public void onMouseClicked
 }
