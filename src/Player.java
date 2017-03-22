@@ -20,7 +20,6 @@ import javalib.worldimages.WorldImage;
 // to represent a player
 public class Player extends Entity {
   int numAmmos;
-
   Player(Posn pos, int level, double direction) {
     super(pos, level, direction);
     this.hp = 100 + this.level * 25;
@@ -29,19 +28,24 @@ public class Player extends Entity {
     this.attackRadius = 5 + this.level;
     this.dmg = 5 + this.level;
     this.hitCircle = 10;
+    this.moveSpeed = 5;
   }
 
   // returns a new player, moved in this.direction
-  void move() {
-
+  void move(List<Obstacle> obstacles) {
+    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
+    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
+    Posn newPos = new Posn(newX, newY);
+    if((new Utils()).isPosnValid(newPos, obstacles)) {
+      this.pos = newPos;
+    }
   }
 
   // returns a new Bullet with dx, dy accoring to player direction
   void shoot(List<Bullet> bullets) {
-
+    bullets.add(new Bullet(this.pos, this.level, this.dir));
   }
 
-  @SuppressWarnings("unchecked")
   WorldImage render() {
     WorldImage image = new BesideAlignImage(AlignModeY.MIDDLE,
             new CircleImage(10, OutlineMode.OUTLINE, Color.BLACK),

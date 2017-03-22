@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.List;
 
 import javalib.funworld.World;
 import javalib.worldimages.CircleImage;
@@ -19,12 +20,21 @@ public class Bullet extends Entity {
   }
 
   // return a new bullet with updated pos and same dx, dy
-  void move() {
-
+  void move(List<Obstacle> obstacles) {
+    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
+    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
+    Posn newPos = new Posn(newX, newY);
+    if((new Utils()).isPosnValid(newPos, obstacles)) {
+      this.pos = newPos;
+    }
   }
 
-  void hit(Zombie zombie) {
-
+  boolean hit(Zombie zombie) {
+    if(new Utils().checkCollision(this.pos, this.attackRadius, zombie.pos, zombie.hitCircle)) {
+      zombie.hp -= this.dmg;
+      return true;
+    }
+    return false;
   }
 
   WorldImage render() {

@@ -8,4 +8,7 @@ public class Utils {
   boolean isPosnValid(Posn newPosn, List<Obstacle> obstacles) {
     return true;
   }
+  boolean checkCollision(Posn object1, int size1, Posn object2, int size2) {
+    return false;
+  }
 }

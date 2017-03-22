@@ -35,7 +35,7 @@ public class DeadWorld extends World {
     if (this.zombies.size() == 0) {
       this.level += 1;
       this.player.levelUp();
-      this.initZombies();
+      //this.initZombies(); TODO
     }
 
     this.collisionHandle();
@@ -63,18 +63,24 @@ public class DeadWorld extends World {
 
   void zombieMovementHandle() {
     for (Zombie zombie : this.zombies) {
-      zombie.move();
+      zombie.move(this.obstacles);
     }
   }
 
   void bulletMovementHandle() {
     for (int idx = 0; idx < this.bullets.size(); idx += 1) {
       Bullet bullet = this.bullets.get(idx);
-      bullet.move();
-      if (bullet.isOutOfBound(this.topLeft, this.botRight)) {
-        this.bullets.remove(idx);
-        idx -= 1;
+      bullet.move(this.obstacles);
+      for (Obstacle obstacle : this.obstacles) {
+        if(obstacle.checkCollision(bullet)) {
+          this.bullets.remove(idx);
+          idx -= 1;
+        }
       }
     }
+  }
+
+  void onKeyEvent() {
+
   }
 }

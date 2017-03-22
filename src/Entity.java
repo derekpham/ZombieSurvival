@@ -1,6 +1,8 @@
 import javalib.worldimages.Posn;
 import javalib.worldimages.WorldImage;
 
+import java.util.List;
+
 // to represent an entity
 public abstract class Entity {
   Posn pos;
@@ -11,6 +13,7 @@ public abstract class Entity {
   int hitCircle;
   int sightRadius;
   int attackRadius;
+  int moveSpeed;
 
   Entity(Posn pos, int level, double direction) {
     this.pos = pos;
@@ -23,7 +26,9 @@ public abstract class Entity {
     this.hitCircle = 0;
   }
 
-  abstract void move();
+  abstract void move(List<Obstacle> obstacles);
 
   abstract WorldImage render();
+
+
 }
