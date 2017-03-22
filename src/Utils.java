@@ -9,8 +9,11 @@ public class Utils {
   boolean isPosnValid(Posn newPosn, List<Obstacle> obstacles) {
     return true;
   }
-  boolean checkCollision(Posn object1, int size1, Posn object2, int size2) {
-    return false;
+  boolean checkCollision(Posn loc1, int size1, Posn loc2, int size2) {
+    double totalSize = size1 + size2;
+    double distance = Math.sqrt((loc2.x-loc1.x)^2 + (loc2.y - loc1.y)^2);
+
+    return Math.abs(distance - totalSize) < .01;
   }
   double getDegreeDir(Posn from, Posn to) {
     return Math.toDegrees(Math.atan2(to.y - from.y, to.x - from.x));
