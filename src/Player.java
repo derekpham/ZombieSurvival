@@ -57,6 +57,8 @@ public class Player extends Entity {
 
   // returns a new Bullet with dx, dy accoring to player direction
   void shoot(Posn target, List<Bullet> bullets) {
+    Double direction = new Utils().getDegreeDir(this.pos, target);
+    this.dir = direction;
     bullets.add(new Bullet(this.pos, this.level, this.dir));
   }
 
