@@ -33,16 +33,30 @@ public class Player extends Entity {
 
   // returns a new player, moved in this.direction
   void move(List<Obstacle> obstacles) {
-    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
-    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
+    throw new UnsupportedOperationException("not allowed for player");
+  }
+
+  void inputMove(String input, List<Obstacle> obstacles) {
+    int newX = this.pos.x;
+    int newY = this.pos.y;
+    if(input.equals("up")) {
+      newX -= this.moveSpeed;
+    } else if(input.equals("down")) {
+      newX += this.moveSpeed;
+    } else if(input.equals("left")) {
+      newY -= this.moveSpeed;
+    } else if(input.equals("right")) {
+      newY += this.moveSpeed;
+    }
     Posn newPos = new Posn(newX, newY);
-    if((new Utils()).isPosnValid(newPos, obstacles)) {
+
+    if(new Utils().isPosnValid(newPos, obstacles)) {
       this.pos = newPos;
     }
   }
 
   // returns a new Bullet with dx, dy accoring to player direction
-  void shoot(List<Bullet> bullets) {
+  void shoot(Posn target, List<Bullet> bullets) {
     bullets.add(new Bullet(this.pos, this.level, this.dir));
   }
 

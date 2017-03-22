@@ -11,4 +11,7 @@ public class Utils {
   boolean checkCollision(Posn object1, int size1, Posn object2, int size2) {
     return false;
   }
+  double getDegreeDir(Posn from, Posn to) {
+    return 0;
+  }
 }
