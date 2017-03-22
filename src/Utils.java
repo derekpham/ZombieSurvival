@@ -1,5 +1,6 @@
 import java.util.List;
 import javalib.worldimages.Posn;
+import java.math.*;
 
 /**
  * Created by derek on 3/17/17.
@@ -12,6 +13,6 @@ public class Utils {
     return false;
   }
   double getDegreeDir(Posn from, Posn to) {
-    return 0;
+    return Math.toDegrees(Math.atan2(to.y - from.y, to.x - from.x));
   }
 }
