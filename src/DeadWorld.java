@@ -88,5 +88,7 @@ public class DeadWorld extends World {
     }
   }
 
-  public void onMouseClicked
+  public void onMouseClicked(Posn pos) {
+    this.player.shoot(pos, this.bullets);
+  }
 }
