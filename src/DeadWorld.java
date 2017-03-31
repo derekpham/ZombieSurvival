@@ -72,7 +72,7 @@ public class DeadWorld extends World {
       Bullet bullet = this.bullets.get(idx);
       bullet.move(this.obstacles);
       for (Obstacle obstacle : this.obstacles) {
-        if(obstacle.checkCollision(bullet)) {
+        if(obstacle.collides(bullet.pos, bullet.hitCircle)) {
           this.bullets.remove(idx);
           idx -= 1;
         }

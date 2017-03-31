@@ -50,7 +50,7 @@ public class Player extends Entity {
     }
     Posn newPos = new Posn(newX, newY);
 
-    if(new Utils().isPosnValid(newPos, obstacles)) {
+    if(new Utils().isPosnValid(newPos, this.hitCircle, obstacles)) {
       this.pos = newPos;
     }
   }

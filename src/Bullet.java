@@ -24,7 +24,7 @@ public class Bullet extends Entity {
     int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
     int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
     Posn newPos = new Posn(newX, newY);
-    if((new Utils()).isPosnValid(newPos, obstacles)) {
+    if((new Utils()).isPosnValid(newPos, this.hitCircle, obstacles)) {
       this.pos = newPos;
     }
   }
