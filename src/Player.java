@@ -7,6 +7,7 @@ import javalib.worldimages.AlignModeY;
 import javalib.worldimages.BesideAlignImage;
 import javalib.worldimages.CircleImage;
 import javalib.worldimages.EquilateralTriangleImage;
+import javalib.worldimages.FromFileImage;
 import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
 import javalib.worldimages.RotateImage;
@@ -63,10 +64,7 @@ public class Player extends Entity {
   }
 
   WorldImage render() {
-    WorldImage image = new BesideAlignImage(AlignModeY.MIDDLE,
-            new CircleImage(10, OutlineMode.OUTLINE, Color.BLACK),
-            new EquilateralTriangleImage(5.0, OutlineMode.OUTLINE, Color.BLACK));
-    return new RotateImage(image, this.dir);
+    return new FromFileImage("src/torch.png");
   }
 
   void levelUp() {

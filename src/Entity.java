@@ -26,9 +26,11 @@ public abstract class Entity {
     this.hitCircle = 0;
   }
 
+  Posn getPos() {
+    return this.pos;
+  }
+
   abstract void move(List<Obstacle> obstacles);
 
   abstract WorldImage render();
-
-
 }

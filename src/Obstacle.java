@@ -13,6 +13,10 @@ public abstract class Obstacle {
     this.botRight = botRight;
   }
 
+  Posn getPos() {
+    return new Posn((this.botRight.x + this.topLeft.x) / 2, (this.botRight.y + this.topLeft.x) / 2);
+  }
+
   boolean collides(Entity e) {
     return this.topLeft.x < (e.pos.x + e.hitCircle)        // checks line collisions
             && this.botRight.x > (e.pos.x - e.hitCircle)

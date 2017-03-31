@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import javalib.impworld.World;
 import javalib.impworld.WorldScene;
 import javalib.worldimages.Posn;
@@ -8,6 +10,7 @@ import javalib.worldimages.Posn;
  * Created by derek on 3/17/17.
  */
 public class DeadWorld extends World {
+  final static int size = 500;
   Player player;
   List<Bullet> bullets;
   List<Zombie> zombies;
@@ -18,24 +21,42 @@ public class DeadWorld extends World {
 
   // initial constructor
   DeadWorld() {
-    this.player = new Player(new Posn(0, 0), 0, 0);
+    this.player = new Player(new Posn(15, size / 2), 0, 0);
     this.bullets = new ArrayList<Bullet>(100);
     this.zombies = new ArrayList<Zombie>(50);
     this.obstacles = new ArrayList<Obstacle>(50);
     this.level = 0;
     this.topLeft = new Posn(0, 0);
-    this.botRight = new Posn(500, 500);
+    this.botRight = new Posn(size, size);
   }
 
   public WorldScene makeScene() {
-    return null;
+    int width = this.botRight.x - this.topLeft.x;
+    int height = this.botRight.y - this.topLeft.y;
+    WorldScene result = new WorldScene(width, height);
+
+    for (Obstacle obstacle : this.obstacles) {
+      result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
+    }
+
+    result.placeImageXY(this.player.render(), this.player.getPos().x, this.player.getPos().y);
+
+    for (Bullet bullet : this.bullets) {
+      result.placeImageXY(bullet.render(), bullet.getPos().x, bullet.getPos().y);
+    }
+
+    for (Zombie zombie : this.zombies) {
+      result.placeImageXY(zombie.render(), zombie.getPos().x, zombie.getPos().y);
+    }
+
+    return result;
   }
 
   public void onTick() {
     if (this.zombies.size() == 0) {
       this.level += 1;
       this.player.levelUp();
-      //this.initZombies(); TODO
+      this.zombies = this.initZombies();
     }
 
     this.collisionHandle();
@@ -43,8 +64,32 @@ public class DeadWorld extends World {
     this.bulletMovementHandle();
   }
 
+  List<Zombie> initZombies() {
+    Posn halfBoundary = new Posn(250, 0);
+    List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
+    while (zombies.size() < this.level * 5) {
+      zombies.add(this.getRandomZombie(halfBoundary));
+    }
+
+    return zombies;
+  }
+
+  Zombie getRandomZombie(Posn topLeft) {
+    Random random = new Random();
+    int randX = random.nextInt() * 250 + 250;
+    int randY = random.nextInt() * 500;
+    Posn posn = new Posn(randX, randY);
+    while (Utils.isPosnValid(posn, 10, this.obstacles) && Utils.isWithinBoundary(posn, topLeft, this.botRight)) {
+      randX = random.nextInt() * 250 + 250;
+      randY = random.nextInt() * 500;
+      posn = new Posn(randX, randY);
+    }
+
+    return new Zombie(posn, this.level, 180);
+  }
+
   void collisionHandle() {
-    for (int bulletIdx = 0; bulletIdx < this.zombies.size(); bulletIdx += 1) {
+    for (int bulletIdx = 0; bulletIdx < this.bullets.size(); bulletIdx += 1) {
       Bullet bullet = this.bullets.get(bulletIdx);
       for (int zombieIdx = 0; zombieIdx < this.zombies.size(); zombieIdx += 1) {
         Zombie zombie = this.zombies.get(zombieIdx);
