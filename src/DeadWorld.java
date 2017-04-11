@@ -10,7 +10,8 @@ import javalib.worldimages.Posn;
  * Created by derek on 3/17/17.
  */
 public class DeadWorld extends World {
-  final static int size = 500;
+  final static int WIDTH = 1300;
+  final static int HEIGHT = 700;
   Player player;
   List<Bullet> bullets;
   List<Zombie> zombies;
@@ -21,19 +22,17 @@ public class DeadWorld extends World {
 
   // initial constructor
   DeadWorld() {
-    this.player = new Player(new Posn(15, size / 2), 0, 0);
+    this.player = new Player(new Posn(20, HEIGHT / 2), 0, 0);
     this.bullets = new ArrayList<Bullet>();
     this.zombies = new ArrayList<Zombie>();
     this.obstacles = new ArrayList<Obstacle>();
     this.level = 0;
     this.topLeft = new Posn(0, 0);
-    this.botRight = new Posn(size, size);
+    this.botRight = new Posn(WIDTH, HEIGHT);
   }
 
   public WorldScene makeScene() {
-    int width = this.botRight.x - this.topLeft.x;
-    int height = this.botRight.y - this.topLeft.y;
-    WorldScene result = new WorldScene(width, height);
+    WorldScene result = new WorldScene(WIDTH, HEIGHT);
 
     for (Obstacle obstacle : this.obstacles) {
       result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
@@ -65,28 +64,19 @@ public class DeadWorld extends World {
   }
 
   void initZombies() {
-    Posn halfBoundary = new Posn(250, 0);
+    Posn halfBoundary = new Posn(WIDTH / 2, 0);
     //List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
-    while (zombies.size() < this.level * 5) {
-      this.zombies.add(this.getRandomZombie(halfBoundary));
+    while (this.zombies.size() < this.level * 5) {
+      this.zombies.add(this.getRandomZombie(halfBoundary, this.botRight));
     }
-
-    //return zombies;
   }
 
-  Zombie getRandomZombie(Posn halfTopLeft) {
+  Zombie getRandomZombie(Posn topLeft, Posn botRight) {
     Random random = new Random();
-    int randX;
-    int randY;
-    Posn posn;
-    //do {
-      randX =  250;
-      randY = 250;
-      posn = new Posn(randX, randY);
-    //}
-    //while (Utils.isWithinBoundary(posn, halfTopLeft, this.botRight)) ;
-
-    return new Zombie(posn, this.level, 180);
+    int x = random.nextInt(botRight.x - topLeft.x) + topLeft.x;
+    int y = random.nextInt(botRight.y - topLeft.y) + topLeft.y;
+    Posn pos = new Posn(x, y);
+    return new Zombie(pos, this.level, 180);
   }
 
   void collisionHandle() {
