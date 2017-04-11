@@ -31,19 +31,19 @@ public class Zombie extends Entity {
   }
 
   void move(java.util.List<Obstacle> obstacles) {
-    if(this.turnCounter <= 0) {
-      this.turnCounter = 10;
-      this.dir = r.nextDouble() * 360;
-    } else {
-      this.turnCounter -= 1;
-    }
-
-    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
-    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
-    Posn newPos = new Posn(newX, newY);
-    if((new Utils()).isPosnValid(newPos, this.hitCircle, obstacles)) {
-      this.pos = newPos;
-    }
+//    if(this.turnCounter <= 0) {
+//      this.turnCounter = 10;
+//      this.dir = r.nextDouble() * 360;
+//    } else {
+//      this.turnCounter -= 1;
+//    }
+//
+//    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
+//    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
+//    Posn newPos = new Posn(newX, newY);
+//    if((new Utils()).isPosnValid(newPos, this.hitCircle, obstacles)) {
+//      this.pos = newPos;
+//    }
 
   }
 

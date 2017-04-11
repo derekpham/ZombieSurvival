@@ -22,9 +22,9 @@ public class DeadWorld extends World {
   // initial constructor
   DeadWorld() {
     this.player = new Player(new Posn(15, size / 2), 0, 0);
-    this.bullets = new ArrayList<Bullet>(100);
-    this.zombies = new ArrayList<Zombie>(50);
-    this.obstacles = new ArrayList<Obstacle>(50);
+    this.bullets = new ArrayList<Bullet>();
+    this.zombies = new ArrayList<Zombie>();
+    this.obstacles = new ArrayList<Obstacle>();
     this.level = 0;
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(size, size);
@@ -56,7 +56,7 @@ public class DeadWorld extends World {
     if (this.zombies.size() == 0) {
       this.level += 1;
       this.player.levelUp();
-      this.zombies = this.initZombies();
+      this.initZombies();
     }
 
     this.collisionHandle();
@@ -64,26 +64,27 @@ public class DeadWorld extends World {
     this.bulletMovementHandle();
   }
 
-  List<Zombie> initZombies() {
+  void initZombies() {
     Posn halfBoundary = new Posn(250, 0);
-    List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
+    //List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
     while (zombies.size() < this.level * 5) {
-      zombies.add(this.getRandomZombie(halfBoundary));
+      this.zombies.add(this.getRandomZombie(halfBoundary));
     }
 
-    return zombies;
+    //return zombies;
   }
 
-  Zombie getRandomZombie(Posn topLeft) {
+  Zombie getRandomZombie(Posn halfTopLeft) {
     Random random = new Random();
-    int randX = random.nextInt() * 250 + 250;
-    int randY = random.nextInt() * 500;
-    Posn posn = new Posn(randX, randY);
-    while (Utils.isPosnValid(posn, 10, this.obstacles) && Utils.isWithinBoundary(posn, topLeft, this.botRight)) {
-      randX = random.nextInt() * 250 + 250;
-      randY = random.nextInt() * 500;
+    int randX;
+    int randY;
+    Posn posn;
+    //do {
+      randX =  250;
+      randY = 250;
       posn = new Posn(randX, randY);
-    }
+    //}
+    //while (Utils.isWithinBoundary(posn, halfTopLeft, this.botRight)) ;
 
     return new Zombie(posn, this.level, 180);
   }

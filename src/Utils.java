@@ -15,7 +15,7 @@ public class Utils {
   }
 
   static boolean isWithinBoundary(Posn posn, Posn topLeft, Posn botRight) {
-    return posn.x > topLeft.x && posn.y >topLeft.y && posn.x < botRight.x && posn.y < botRight.y;
+    return posn.x > topLeft.x && posn.y >  topLeft.y && posn.x < botRight.x && posn.y < botRight.y;
   }
 
   static boolean isEntityValid(Entity e, List<Obstacle> obstacles) {

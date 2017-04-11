@@ -41,13 +41,13 @@ public class Player extends Entity {
     int newX = this.pos.x;
     int newY = this.pos.y;
     if(input.equals("up")) {
-      newX -= this.moveSpeed;
-    } else if(input.equals("down")) {
-      newX += this.moveSpeed;
-    } else if(input.equals("left")) {
       newY -= this.moveSpeed;
-    } else if(input.equals("right")) {
+    } else if(input.equals("down")) {
       newY += this.moveSpeed;
+    } else if(input.equals("left")) {
+      newX -= this.moveSpeed;
+    } else if(input.equals("right")) {
+      newX += this.moveSpeed;
     }
     Posn newPos = new Posn(newX, newY);
 
