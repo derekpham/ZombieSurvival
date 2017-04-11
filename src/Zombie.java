@@ -16,9 +16,9 @@ public class Zombie extends Entity {
     this.hp = 30 + this.level * 10;
     this.dmg = this.hp / 4;
     if (level < 5) {
-      this.sightRadius = 0;
+      this.sightRadius = 50;
     } else {
-      this.sightRadius = 5 + (level - 5) * 2;
+      this.sightRadius = 50 * (level - 4);
     }
     this.attackRadius = 5 + this.level * 2;
     this.hitCircle = 10;
@@ -43,8 +43,10 @@ public class Zombie extends Entity {
     int newX = (int)(this.moveSpeed * Math.cos(this.dir)) + this.pos.x;
     int newY = (int)(this.moveSpeed * Math.sin(this.dir)) + this.pos.y;
     Posn newPos = new Posn(newX, newY);
-    if((new Utils()).isPosnValid(newPos, this.hitCircle, obstacles)) {
+    if((new Utils().isPosnValid(newPos, this.hitCircle, obstacles))) {
       this.pos = newPos;
+    } else {
+      this.dir = r.nextDouble() *360;
     }
   }
 

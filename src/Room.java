@@ -10,11 +10,15 @@ public class Room extends Obstacle {
     super(topLeft, botRight);
   }
 
-  boolean checkCollision(Entity e) {
+  public boolean collides(Entity e) {
     return this.topLeft.x > e.pos.x
         && this.botRight.x < e.pos.x
         && this.topLeft.y < e.pos.y
         && this.botRight.y > e.pos.y;
+  }
+
+  boolean collides(Posn pos, int hitRadius) {
+    return !Utils.isWithinBoundary(pos, this.topLeft, this.botRight);// TODO add conrner collisions using pythagorean
   }
 
   WorldImage render() {

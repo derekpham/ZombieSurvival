@@ -32,6 +32,7 @@ public class DeadWorld extends World {
     this.level = 0;
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(WIDTH, HEIGHT);
+    this.obstacles.add(new Room(this.topLeft, this.botRight));
   }
 
   public void onTick() {
