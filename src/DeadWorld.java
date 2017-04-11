@@ -8,6 +8,7 @@ import javalib.impworld.WorldScene;
 import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
 import javalib.worldimages.RectangleImage;
+import javalib.worldimages.TextImage;
 
 /**
  * Created by derek on 3/17/17.
@@ -23,6 +24,7 @@ public class DeadWorld extends World {
   int level;
   Posn topLeft;
   Posn botRight;
+  boolean hasLost;
 
   // initial constructor
   DeadWorld() {
@@ -34,23 +36,27 @@ public class DeadWorld extends World {
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(WIDTH, HEIGHT);
     this.obstacles.add(new Room(this.topLeft, this.botRight));
+    this.hasLost = false;
   }
 
   public void onTick() {
-    if (this.zombies.size() == 0) {
-      this.level += 1;
-      this.player.levelUp();
-      this.initZombies();
-    }
+    if (!this.hasLost) {
+      if (this.zombies.size() == 0) {
+        this.level += 1;
+        this.player.levelUp();
+        this.initZombies();
+      }
 
-    this.collisionHandle();
-    this.zombieMovementHandle();
-    this.bulletMovementHandle();
+      this.collisionsHandleZombiesBullets();
+      this.collisionsHandleZombiesPlayer();
+      this.zombieMovementHandle();
+      this.bulletMovementHandle();
+      this.hasLost = this.player.hp <= 0;
+    }
   }
 
   void initZombies() {
     Posn halfBoundary = new Posn(WIDTH / 2, 0);
-    //List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
     while (this.zombies.size() < this.level * ZOMBIES_MULTIPLIER) {
       this.zombies.add(this.getRandomZombie(halfBoundary, this.botRight));
     }
@@ -64,7 +70,7 @@ public class DeadWorld extends World {
     return new Zombie(pos, this.level, 180);
   }
 
-  void collisionHandle() {
+  void collisionsHandleZombiesBullets() {
     for (int bulletIdx = 0; bulletIdx < this.bullets.size(); bulletIdx += 1) {
       Bullet bullet = this.bullets.get(bulletIdx);
       for (int zombieIdx = 0; zombieIdx < this.zombies.size(); zombieIdx += 1) {
@@ -78,6 +84,16 @@ public class DeadWorld extends World {
           this.bullets.remove(bulletIdx);
           bulletIdx -= 1;
         }
+      }
+    }
+  }
+
+  void collisionsHandleZombiesPlayer() {
+    for (int idx = 0; idx < this.zombies.size(); idx += 1) {
+      Zombie zombie = this.zombies.get(idx);
+      if (Utils.checkCollision(zombie.getPos(), zombie.attackRadius,
+              this.player.getPos(), this.player.hitCircle)) {
+        zombie.hit(this.player);
       }
     }
   }
@@ -115,6 +131,11 @@ public class DeadWorld extends World {
 
   public WorldScene makeScene() {
     WorldScene result = new WorldScene(WIDTH, HEIGHT);
+    if (this.hasLost) {
+      result.placeImageXY(new TextImage("YOU LOST!!!", 30, Color.BLUE),
+              WIDTH / 2, HEIGHT / 2);
+      return result;
+    }
     result.placeImageXY(new RectangleImage(WIDTH, HEIGHT, OutlineMode.SOLID, Color.GRAY),
             WIDTH / 2, HEIGHT / 2);
 
@@ -134,5 +155,4 @@ public class DeadWorld extends World {
 
     return result;
   }
-
 }

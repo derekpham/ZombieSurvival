@@ -10,6 +10,7 @@ public class Zombie extends Entity {
   int turnCounter;
   Random r = new Random();
   final static int TOTAL_TURNS = 20;
+  int hitTimer;
 
   Zombie(Posn pos, int level, double direction) {
     super(pos, level, direction);
@@ -20,10 +21,11 @@ public class Zombie extends Entity {
     } else {
       this.sightRadius = 50 * (level - 4);
     }
-    this.attackRadius = 5 + this.level * 2;
+    this.attackRadius = 25 + this.level;
     this.hitCircle = 25;
     this.turnCounter  = 0;
     this.moveSpeed = 7;
+    this.hitTimer = 0;
   }
 
   void move(List<Obstacle> obstacles) {
@@ -34,7 +36,7 @@ public class Zombie extends Entity {
     if (Utils.distanceBetween(this.pos, prey.getPos()) < this.sightRadius) {
       this.dir = Utils.getDir(this.pos, prey.getPos());
     } else if (this.turnCounter <= 0) {
-      this.turnCounter = TOTAL_TURNS;
+      this.turnCounter = TOTAL_TURNS + r.nextInt(TOTAL_TURNS/2);
       this.dir = r.nextDouble() * Math.PI * 2;
     } else {
       this.turnCounter -= 1;
@@ -56,6 +58,15 @@ public class Zombie extends Entity {
 
   void takeHit(Bullet bullet) {
     this.hp -= bullet.dmg;
+  }
+
+  void hit(Player player) {
+    if (this.hitTimer <= 0) {
+      player.hp -= this.dmg;
+      this.hitTimer = 20;
+    } else {
+      this.hitTimer -= 1;
+    }
   }
 
   boolean isDead() {

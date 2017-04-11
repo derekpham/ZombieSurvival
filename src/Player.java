@@ -13,12 +13,12 @@ public class Player extends Entity {
   int numAmmos;
   Player(Posn pos, int level, double direction) {
     super(pos, level, direction);
-    this.hp = 100 + this.level * 25;
+    this.hp = 50 + this.level * 25;
     this.numAmmos = 50 + this.level * 5;
     this.sightRadius = 50 + this.level * 5;
     this.attackRadius = 5 + this.level;
     this.dmg = 5 + this.level;
-    this.hitCircle = 10;
+    this.hitCircle = 25;
     this.moveSpeed = 20;
   }
 
