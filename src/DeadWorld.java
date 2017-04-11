@@ -1,10 +1,13 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javalib.impworld.World;
 import javalib.impworld.WorldScene;
+import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
+import javalib.worldimages.RectangleImage;
 
 /**
  * Created by derek on 3/17/17.
@@ -29,26 +32,6 @@ public class DeadWorld extends World {
     this.level = 0;
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(WIDTH, HEIGHT);
-  }
-
-  public WorldScene makeScene() {
-    WorldScene result = new WorldScene(WIDTH, HEIGHT);
-
-    for (Obstacle obstacle : this.obstacles) {
-      result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
-    }
-
-    result.placeImageXY(this.player.render(), this.player.getPos().x, this.player.getPos().y);
-
-    for (Bullet bullet : this.bullets) {
-      result.placeImageXY(bullet.render(), bullet.getPos().x, bullet.getPos().y);
-    }
-
-    for (Zombie zombie : this.zombies) {
-      result.placeImageXY(zombie.render(), zombie.getPos().x, zombie.getPos().y);
-    }
-
-    return result;
   }
 
   public void onTick() {
@@ -127,4 +110,27 @@ public class DeadWorld extends World {
   public void onMouseClicked(Posn pos) {
     this.player.shoot(pos, this.bullets);
   }
+
+  public WorldScene makeScene() {
+    WorldScene result = new WorldScene(WIDTH, HEIGHT);
+    result.placeImageXY(new RectangleImage(WIDTH, HEIGHT, OutlineMode.SOLID, Color.GRAY),
+            WIDTH / 2, HEIGHT / 2);
+
+    for (Obstacle obstacle : this.obstacles) {
+      result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
+    }
+
+    result.placeImageXY(this.player.render(), this.player.getPos().x, this.player.getPos().y);
+
+    for (Bullet bullet : this.bullets) {
+      result.placeImageXY(bullet.render(), bullet.getPos().x, bullet.getPos().y);
+    }
+
+    for (Zombie zombie : this.zombies) {
+      result.placeImageXY(zombie.render(), zombie.getPos().x, zombie.getPos().y);
+    }
+
+    return result;
+  }
+
 }
