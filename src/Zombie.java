@@ -21,9 +21,9 @@ public class Zombie extends Entity {
       this.sightRadius = 50 * (level - 4);
     }
     this.attackRadius = 5 + this.level * 2;
-    this.hitCircle = 10;
+    this.hitCircle = 25;
     this.turnCounter  = 0;
-    this.moveSpeed = 10;
+    this.moveSpeed = 7;
   }
 
   void move(List<Obstacle> obstacles) {
@@ -32,10 +32,10 @@ public class Zombie extends Entity {
 
   void move(Player prey, List<Obstacle> obstacles) {
     if (Utils.distanceBetween(this.pos, prey.getPos()) < this.sightRadius) {
-      this.dir = Utils.getDegreeDir(this.pos, prey.getPos());
+      this.dir = Utils.getDir(this.pos, prey.getPos());
     } else if (this.turnCounter <= 0) {
       this.turnCounter = TOTAL_TURNS;
-      this.dir = r.nextDouble() * 360;
+      this.dir = r.nextDouble() * Math.PI * 2;
     } else {
       this.turnCounter -= 1;
     }
@@ -43,7 +43,7 @@ public class Zombie extends Entity {
     int newX = (int)(this.moveSpeed * Math.cos(this.dir)) + this.pos.x;
     int newY = (int)(this.moveSpeed * Math.sin(this.dir)) + this.pos.y;
     Posn newPos = new Posn(newX, newY);
-    if((new Utils().isPosnValid(newPos, this.hitCircle, obstacles))) {
+    if(Utils.isPosnValid(newPos, this.hitCircle, obstacles)) {
       this.pos = newPos;
     } else {
       this.dir = r.nextDouble() *360;
@@ -51,7 +51,7 @@ public class Zombie extends Entity {
   }
 
   boolean checkCollision(Bullet bullet) {
-    return new Utils().checkCollision(this.pos, this.hitCircle, bullet.pos, bullet.attackRadius);
+    return Utils.checkCollision(this.pos, this.hitCircle, bullet.pos, bullet.attackRadius);
   }
 
   void takeHit(Bullet bullet) {

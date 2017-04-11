@@ -1,17 +1,7 @@
-import com.sun.istack.internal.NotNull;
-
-import java.awt.*;
 import java.util.List;
 
-import javalib.worldimages.AlignModeY;
-import javalib.worldimages.BesideAlignImage;
-import javalib.worldimages.CircleImage;
-import javalib.worldimages.EquilateralTriangleImage;
 import javalib.worldimages.FromFileImage;
-import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
-import javalib.worldimages.RotateImage;
-import javalib.worldimages.TriangleImage;
 import javalib.worldimages.WorldImage;
 
 /**
@@ -58,7 +48,7 @@ public class Player extends Entity {
 
   // returns a new Bullet with dx, dy accoring to player direction
   void shoot(Posn target, List<Bullet> bullets) {
-    Double direction = new Utils().getDegreeDir(this.pos, target);
+    Double direction = Utils.getDir(this.pos, target);
     this.dir = direction;
     bullets.add(new Bullet(this.pos, this.level, this.dir));
   }

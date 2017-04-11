@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.util.List;
-
-import javalib.funworld.World;
 import javalib.worldimages.CircleImage;
 import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
@@ -17,16 +15,14 @@ public class Bullet extends Entity {
     super(pos, level, direction);
     this.attackRadius = 5;
     this.dmg = 15 + this.level * 2;
+    this.moveSpeed = 20;
   }
 
-  // return a new bullet with updated pos and same dx, dy
   void move(List<Obstacle> obstacles) {
-    int newX = this.moveSpeed * (int) Math.cos(Math.toRadians(this.dir));
-    int newY = this.moveSpeed * (int) Math.sin(Math.toRadians(this.dir));
+    int newX = (int)(this.moveSpeed * Math.cos(this.dir)) + this.pos.x;
+    int newY = (int)(this.moveSpeed * Math.sin(this.dir)) + this.pos.y;
     Posn newPos = new Posn(newX, newY);
-    if((new Utils()).isPosnValid(newPos, this.hitCircle, obstacles)) {
-      this.pos = newPos;
-    }
+    this.pos = newPos;
   }
 
   boolean hit(Zombie zombie) {

@@ -15,6 +15,7 @@ import javalib.worldimages.RectangleImage;
 public class DeadWorld extends World {
   final static int WIDTH = 1300;
   final static int HEIGHT = 700;
+  final static int ZOMBIES_MULTIPLIER = 5;
   Player player;
   List<Bullet> bullets;
   List<Zombie> zombies;
@@ -50,7 +51,7 @@ public class DeadWorld extends World {
   void initZombies() {
     Posn halfBoundary = new Posn(WIDTH / 2, 0);
     //List<Zombie> zombies = new ArrayList<Zombie>(this.level * 5);
-    while (this.zombies.size() < this.level * 5) {
+    while (this.zombies.size() < this.level * ZOMBIES_MULTIPLIER) {
       this.zombies.add(this.getRandomZombie(halfBoundary, this.botRight));
     }
   }

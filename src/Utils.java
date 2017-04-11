@@ -29,12 +29,13 @@ public class Utils {
 
   static boolean checkCollision(Posn loc1, int size1, Posn loc2, int size2) {
     double totalSize = size1 + size2;
-    double distance = Math.sqrt((loc2.x-loc1.x)^2 + (loc2.y - loc1.y)^2);
+    double distance = distanceBetween(loc1, loc2);
 
-    return Math.abs(distance - totalSize) < .01;
+    return distance < totalSize;
   }
 
-  static double getDegreeDir(Posn from, Posn to) {
+  // in radians
+  static double getDir(Posn from, Posn to) {
     return Math.atan2(to.y - from.y, to.x - from.x);
   }
 
