@@ -82,7 +82,7 @@ public class DeadWorld extends World {
 
   void zombieMovementHandle() {
     for (Zombie zombie : this.zombies) {
-      zombie.move(this.obstacles);
+      zombie.move(this.player, this.obstacles);
     }
   }
 

@@ -35,6 +35,10 @@ public class Utils {
   }
 
   static double getDegreeDir(Posn from, Posn to) {
-    return Math.toDegrees(Math.atan2(to.y - from.y, to.x - from.x));
+    return Math.atan2(to.y - from.y, to.x - from.x);
+  }
+
+  static double distanceBetween(Posn pos1, Posn pos2) {
+    return Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
   }
 }

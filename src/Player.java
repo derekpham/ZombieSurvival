@@ -29,7 +29,7 @@ public class Player extends Entity {
     this.attackRadius = 5 + this.level;
     this.dmg = 5 + this.level;
     this.hitCircle = 10;
-    this.moveSpeed = 5;
+    this.moveSpeed = 20;
   }
 
   // returns a new player, moved in this.direction
@@ -40,13 +40,13 @@ public class Player extends Entity {
   void inputMove(String input, List<Obstacle> obstacles) {
     int newX = this.pos.x;
     int newY = this.pos.y;
-    if(input.equals("up")) {
+    if(input.equals("up") || input.equals("w")) {
       newY -= this.moveSpeed;
-    } else if(input.equals("down")) {
+    } else if(input.equals("down") || input.equals("s")) {
       newY += this.moveSpeed;
-    } else if(input.equals("left")) {
+    } else if(input.equals("left") || input.equals("a")) {
       newX -= this.moveSpeed;
-    } else if(input.equals("right")) {
+    } else if(input.equals("right") || input.equals("d")) {
       newX += this.moveSpeed;
     }
     Posn newPos = new Posn(newX, newY);
