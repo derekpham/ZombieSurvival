@@ -13,8 +13,8 @@ public class Wall extends Obstacle {
     super(topLeft, botRight);
   }
 
-  WorldImage render() {
+  public WorldImage render() {
     return new RectangleImage(this.botRight.x - this.topLeft.x,
-            this.botRight.y - this.botRight.y, OutlineMode.SOLID, Color.WHITE);
+            this.botRight.y - this.topLeft.y, OutlineMode.SOLID, Color.BLACK);
   }
 }

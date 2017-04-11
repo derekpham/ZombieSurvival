@@ -11,6 +11,8 @@ import javalib.worldimages.WorldImage;
 // to represent a player
 public class Player extends Entity {
   int numAmmos;
+  int lastTickShot;
+  static final int ATTACKSPEED = 10;
   Player(Posn pos, int level, double direction) {
     super(pos, level, direction);
     this.hp = 50 + this.level * 25;
@@ -20,6 +22,7 @@ public class Player extends Entity {
     this.dmg = 5 + this.level;
     this.hitCircle = 25;
     this.moveSpeed = 20;
+    this.lastTickShot = -ATTACKSPEED;
   }
 
   // returns a new player, moved in this.direction
@@ -47,10 +50,13 @@ public class Player extends Entity {
   }
 
   // returns a new Bullet with dx, dy accoring to player direction
-  void shoot(Posn target, List<Bullet> bullets) {
-    Double direction = Utils.getDir(this.pos, target);
-    this.dir = direction;
-    bullets.add(new Bullet(this.pos, this.level, this.dir));
+  void shoot(Posn target, List<Bullet> bullets, int curTick) {
+    if(curTick > ATTACKSPEED + this.lastTickShot) {
+      Double direction = Utils.getDir(this.pos, target);
+      this.dir = direction;
+      bullets.add(new Bullet(this.pos, this.level, this.dir));
+      this.lastTickShot = curTick;
+    }
   }
 
   WorldImage render() {

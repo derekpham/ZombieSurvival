@@ -25,6 +25,7 @@ public class DeadWorld extends World {
   Posn topLeft;
   Posn botRight;
   boolean hasLost;
+  int tickPast;
 
   // initial constructor
   DeadWorld() {
@@ -36,7 +37,9 @@ public class DeadWorld extends World {
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(WIDTH, HEIGHT);
     this.obstacles.add(new Room(this.topLeft, this.botRight));
+    this.initWalls(10);
     this.hasLost = false;
+    this.tickPast = 0;
   }
 
   public void onTick() {
@@ -52,6 +55,7 @@ public class DeadWorld extends World {
       this.zombieMovementHandle();
       this.bulletMovementHandle();
       this.hasLost = this.player.hp <= 0;
+      tickPast += 1;
     }
   }
 
@@ -68,6 +72,32 @@ public class DeadWorld extends World {
     int y = random.nextInt(botRight.y - topLeft.y) + topLeft.y;
     Posn pos = new Posn(x, y);
     return new Zombie(pos, this.level, 180);
+  }
+
+  void initWalls(int toAdd) {
+    Random r = new Random();
+    int thickness = 50;
+    int length = 100;
+    for (int i = 0; i < toAdd; i += 1) {
+      length = r.nextInt(100) + 100;
+      this.obstacles.add(this.getRandomWall(thickness,length,r.nextBoolean()));
+    }
+  }
+
+  Wall getRandomWall(int thickness, int length, boolean horizontal) {
+    Random r = new Random();
+    int r1 = r.nextInt(WIDTH - length - thickness);
+    int r2 = r.nextInt(HEIGHT - length - thickness);
+    Posn tL;
+    Posn bR;
+    if(horizontal) {
+      tL = new Posn(r1, r2);
+      bR = new Posn(r1 + length, r2 + thickness);
+    } else {
+      tL = new Posn(r1, r2);
+      bR = new Posn(r1 + thickness, r2 + length);
+    }
+    return new Wall(tL, bR);
   }
 
   void collisionsHandleZombiesBullets() {
@@ -126,7 +156,7 @@ public class DeadWorld extends World {
   }
 
   public void onMouseClicked(Posn pos) {
-    this.player.shoot(pos, this.bullets);
+    this.player.shoot(pos, this.bullets, this.tickPast);
   }
 
   public WorldScene makeScene() {

@@ -25,10 +25,7 @@ public abstract class Obstacle {
   }
 
   boolean collides(Posn pos, int hitRadius) {
-    return this.topLeft.x < (pos.x + hitRadius)        // checks line collisions
-        && this.botRight.x > (pos.x - hitRadius)
-        && this.topLeft.y > (pos.y - hitRadius)
-        && this.botRight.y < (pos.y + hitRadius); // TODO add conrner collisions using pythagorean
+    return Utils.isWithinBoundary(pos, this.topLeft, this.botRight); // TODO add conrner collisions using pythagorean
   }
 
   abstract WorldImage render();
