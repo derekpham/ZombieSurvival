@@ -1,7 +1,13 @@
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
+import javalib.worldimages.AboveImage;
 import javalib.worldimages.FromFileImage;
+import javalib.worldimages.OutlineMode;
+import javalib.worldimages.OverlayImage;
 import javalib.worldimages.Posn;
+import javalib.worldimages.RectangleImage;
 import javalib.worldimages.WorldImage;
 
 /**
@@ -12,7 +18,9 @@ import javalib.worldimages.WorldImage;
 public class Player extends Entity {
   int numAmmos;
   int lastTickShot;
-  static final int ATTACKSPEED = 10;
+  static final int ATTACK_SPEED = 5;
+  int maxHP;
+
   Player(Posn pos, int level, double direction) {
     super(pos, level, direction);
     this.hp = 50 + this.level * 25;
@@ -22,7 +30,8 @@ public class Player extends Entity {
     this.dmg = 5 + this.level;
     this.hitCircle = 25;
     this.moveSpeed = 20;
-    this.lastTickShot = -ATTACKSPEED;
+    this.lastTickShot = -ATTACK_SPEED;
+    this.maxHP = this.hp;
   }
 
   // returns a new player, moved in this.direction
@@ -51,7 +60,7 @@ public class Player extends Entity {
 
   // returns a new Bullet with dx, dy accoring to player direction
   void shoot(Posn target, List<Bullet> bullets, int curTick) {
-    if(curTick > ATTACKSPEED + this.lastTickShot) {
+    if(curTick > ATTACK_SPEED + this.lastTickShot) {
       Double direction = Utils.getDir(this.pos, target);
       this.dir = direction;
       bullets.add(new Bullet(this.pos, this.level, this.dir));
@@ -60,7 +69,12 @@ public class Player extends Entity {
   }
 
   WorldImage render() {
-    return new FromFileImage("src/torch.png");
+    return new AboveImage(this.renderHP(), new FromFileImage("src/torch.png"));
+  }
+
+  WorldImage renderHP() {
+    return new OverlayImage(new RectangleImage((int) (20 * (1.0 * this.hp)/this.maxHP), 5, OutlineMode.SOLID, Color.GREEN),
+            new RectangleImage(20, 5, OutlineMode.OUTLINE, Color.BLACK));
   }
 
   void levelUp() {

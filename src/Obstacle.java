@@ -18,14 +18,17 @@ public abstract class Obstacle {
   }
 
   boolean collides(Entity e) {
-    return this.topLeft.x < (e.pos.x + e.hitCircle)        // checks line collisions
-            && this.botRight.x > (e.pos.x - e.hitCircle)
-            && this.topLeft.y > (e.pos.y - e.hitCircle)
-            && this.botRight.y < (e.pos.y + e.hitCircle); // TODO add conrner collisions using pythagorean
+    return this.topLeft.x < e.pos.x
+            && this.botRight.x > e.pos.x
+            && this.topLeft.y > e.pos.y
+            && this.botRight.y < e.pos.y;
   }
 
   boolean collides(Posn pos, int hitRadius) {
-    return Utils.isWithinBoundary(pos, this.topLeft, this.botRight); // TODO add conrner collisions using pythagorean
+    return this.topLeft.x < pos.x
+            && this.botRight.x > pos.x
+            && this.topLeft.y > pos.y
+            && this.botRight.y < pos.y;
   }
 
   abstract WorldImage render();
