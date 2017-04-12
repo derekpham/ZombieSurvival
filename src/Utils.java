@@ -1,6 +1,6 @@
 import java.util.List;
+
 import javalib.worldimages.Posn;
-import java.math.*;
 
 /**
  * Created by derek on 3/17/17.

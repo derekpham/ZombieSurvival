@@ -5,3 +5,5 @@ public class Main {
     deadWorld.bigBang(DeadWorld.WIDTH, DeadWorld.HEIGHT, tickRate);
   }
 }
+
+// NOTE: we wanna thank this site: https://icons8.com/license/

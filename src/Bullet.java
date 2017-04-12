@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.List;
+
 import javalib.worldimages.CircleImage;
 import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
@@ -19,14 +20,14 @@ public class Bullet extends Entity {
   }
 
   void move(List<Obstacle> obstacles) {
-    int newX = (int)(this.moveSpeed * Math.cos(this.dir)) + this.pos.x;
-    int newY = (int)(this.moveSpeed * Math.sin(this.dir)) + this.pos.y;
+    int newX = (int) (this.moveSpeed * Math.cos(this.dir)) + this.pos.x;
+    int newY = (int) (this.moveSpeed * Math.sin(this.dir)) + this.pos.y;
     Posn newPos = new Posn(newX, newY);
     this.pos = newPos;
   }
 
   boolean hit(Zombie zombie) {
-    if(new Utils().checkCollision(this.pos, this.attackRadius, zombie.pos, zombie.hitCircle)) {
+    if (new Utils().checkCollision(this.pos, this.attackRadius, zombie.pos, zombie.hitCircle)) {
       zombie.hp -= this.dmg;
       return true;
     }

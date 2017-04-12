@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javalib.impworld.World;
 import javalib.impworld.WorldScene;
+import javalib.worldimages.FromFileImage;
 import javalib.worldimages.OutlineMode;
 import javalib.worldimages.Posn;
 import javalib.worldimages.RectangleImage;
@@ -80,7 +81,7 @@ public class DeadWorld extends World {
     int length = 100;
     for (int i = 0; i < toAdd; i += 1) {
       length = r.nextInt(100) + 100;
-      this.obstacles.add(this.getRandomWall(thickness,length,r.nextBoolean()));
+      this.obstacles.add(this.getRandomWall(thickness, length, r.nextBoolean()));
     }
   }
 
@@ -90,7 +91,7 @@ public class DeadWorld extends World {
     int r2 = r.nextInt(HEIGHT - length - thickness);
     Posn tL;
     Posn bR;
-    if(horizontal) {
+    if (horizontal) {
       tL = new Posn(r1, r2);
       bR = new Posn(r1 + length, r2 + thickness);
     } else {
@@ -139,7 +140,7 @@ public class DeadWorld extends World {
       Bullet bullet = this.bullets.get(idx);
       bullet.move(this.obstacles);
       for (Obstacle obstacle : this.obstacles) {
-        if(obstacle.collides(bullet.pos, bullet.hitCircle)) {
+        if (obstacle.collides(bullet.pos, bullet.hitCircle)) {
           this.bullets.remove(idx);
           idx -= 1;
         }
@@ -148,7 +149,7 @@ public class DeadWorld extends World {
   }
 
   public void onKeyEvent(String key) {
-    if(key.equals("r")) {
+    if (key.equals("r")) {
       // restart world
     } else {
       this.player.inputMove(key, this.obstacles);
@@ -182,6 +183,11 @@ public class DeadWorld extends World {
     for (Zombie zombie : this.zombies) {
       result.placeImageXY(zombie.render(), zombie.getPos().x, zombie.getPos().y);
     }
+
+    result.placeImageXY(new FromFileImage("src/bullet.png"),
+            (int)(WIDTH * 0.93), (int)(HEIGHT * 0.95));
+    result.placeImageXY(new TextImage(this.player.numAmmos + "", 20, Color.BLACK),
+            (int)(WIDTH * 0.97), (int)(HEIGHT * 0.95));
 
     return result;
   }

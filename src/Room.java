@@ -1,6 +1,6 @@
-import java.awt.*;
-
-import javalib.worldimages.*;
+import javalib.worldimages.EmptyImage;
+import javalib.worldimages.Posn;
+import javalib.worldimages.WorldImage;
 
 /**
  * Created by dhruv on 3/21/17.
@@ -12,9 +12,9 @@ public class Room extends Obstacle {
 
   public boolean collides(Entity e) {
     return this.topLeft.x > e.pos.x
-        && this.botRight.x < e.pos.x
-        && this.topLeft.y < e.pos.y
-        && this.botRight.y > e.pos.y;
+            && this.botRight.x < e.pos.x
+            && this.topLeft.y < e.pos.y
+            && this.botRight.y > e.pos.y;
   }
 
   boolean collides(Posn pos, int hitRadius) {

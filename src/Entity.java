@@ -1,7 +1,7 @@
+import java.util.List;
+
 import javalib.worldimages.Posn;
 import javalib.worldimages.WorldImage;
-
-import java.util.List;
 
 // to represent an entity
 public abstract class Entity {
