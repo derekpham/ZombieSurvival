@@ -11,13 +11,12 @@ public class HealthUp extends AbstractPowerup {
   int heal;
   int type;
 
-  public HealthUp(Posn pos, int heal) {
+  public HealthUp(Posn pos) {
     super(pos);
-    this.heal = heal;
     this.type = new Random().nextInt(5);
+    this.heal = this.type * 10;
   }
 
-  @Override
   void affect(Player player) {
     int newHp = player.hp + this.heal;
     if (newHp > player.maxHP) {
@@ -27,7 +26,6 @@ public class HealthUp extends AbstractPowerup {
     }
   }
 
-  @Override
   WorldImage render() {
     return new FromFileImage("src/heal" + this.type + ".png");
   }

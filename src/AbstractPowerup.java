@@ -16,6 +16,10 @@ public abstract class AbstractPowerup {
   abstract WorldImage render();
 
   boolean checkCollision(Player player) {
-    return Utils.checkCollision(this.pos, 0, player.getPos(), player.hitCircle);
+    return Utils.checkCollision(this.pos, 25, player.getPos(), player.hitCircle);
+  }
+
+  Posn getPos() {
+    return this.pos;
   }
 }

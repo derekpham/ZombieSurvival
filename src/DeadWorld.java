@@ -22,6 +22,7 @@ public class DeadWorld extends World {
   List<Bullet> bullets;
   List<Zombie> zombies;
   List<Obstacle> obstacles;
+  List<AbstractPowerup> powerups;
   int level;
   Posn topLeft;
   Posn botRight;
@@ -34,11 +35,13 @@ public class DeadWorld extends World {
     this.bullets = new ArrayList<Bullet>();
     this.zombies = new ArrayList<Zombie>();
     this.obstacles = new ArrayList<Obstacle>();
+    this.powerups = new ArrayList<AbstractPowerup>();
     this.level = 0;
     this.topLeft = new Posn(0, 0);
     this.botRight = new Posn(WIDTH, HEIGHT);
     this.obstacles.add(new Room(this.topLeft, this.botRight));
     this.initWalls(0);
+    this.initPowerUp(5);
     this.hasLost = false;
     this.tickPast = 0;
   }
@@ -49,12 +52,18 @@ public class DeadWorld extends World {
         this.level += 1;
         this.player.levelUp();
         this.initZombies();
+        this.initPowerUp(5 - this.powerups.size() - this.level);
+      }
+
+      if (new Random().nextDouble() < .01) {
+        this.initPowerUp(1);
       }
 
       this.collisionsHandleZombiesBullets();
       this.collisionsHandleZombiesPlayer();
       this.zombieMovementHandle();
       this.bulletMovementHandle();
+      this.powerUpHandle();
       this.hasLost = this.player.hp <= 0;
       tickPast += 1;
     }
@@ -99,6 +108,22 @@ public class DeadWorld extends World {
       bR = new Posn(r1 + thickness, r2 + length);
     }
     return new Wall(tL, bR);
+  }
+
+  void initPowerUp(int toAdd) {
+    for (int i = 0; i < toAdd; i += 1) {
+      this.powerups.add(this.getRandomPowerUp());
+    }
+  }
+
+  AbstractPowerup getRandomPowerUp() {
+    Random r = new Random();
+    Posn randPos = new Posn(r.nextInt(WIDTH), r.nextInt(HEIGHT));
+    if (r.nextBoolean()) {
+      return new AmmoUp(randPos);
+    } else {
+      return new HealthUp(randPos);
+    }
   }
 
   void collisionsHandleZombiesBullets() {
@@ -148,6 +173,17 @@ public class DeadWorld extends World {
     }
   }
 
+  void powerUpHandle() {
+    for (int idx = 0; idx < this.powerups.size(); idx += 1) {
+      AbstractPowerup cur = this.powerups.get(idx);
+      if(cur.checkCollision(this.player)) {
+        cur.affect(this.player);
+        this.powerups.remove(idx);
+        idx -= 1;
+      }
+    }
+  }
+
   public void onKeyEvent(String key) {
     if (key.equals("r")) {
       // restart world
@@ -172,6 +208,10 @@ public class DeadWorld extends World {
 
     for (Obstacle obstacle : this.obstacles) {
       result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
+    }
+
+    for (AbstractPowerup powerup : this.powerups) {
+      result.placeImageXY(powerup.render(), powerup.getPos().x, powerup.getPos().y);
     }
 
     result.placeImageXY(this.player.render(), this.player.getPos().x, this.player.getPos().y);
