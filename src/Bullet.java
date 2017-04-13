@@ -12,11 +12,14 @@ import javalib.worldimages.WorldImage;
 
 // to represent a bullet
 public class Bullet extends Entity {
-  Bullet(Posn pos, int level, double direction) {
+  Color color;
+
+  Bullet(Posn pos, int level, double direction, Color color) {
     super(pos, level, direction);
     this.attackRadius = 5;
     this.dmg = 15 + this.level * 2;
     this.moveSpeed = 20;
+    this.color = color;
   }
 
   void move(List<Obstacle> obstacles) {
@@ -35,6 +38,6 @@ public class Bullet extends Entity {
   }
 
   WorldImage render() {
-    return new CircleImage(5, OutlineMode.SOLID, Color.GREEN);
+    return new CircleImage(5, OutlineMode.SOLID, this.color);
   }
 }

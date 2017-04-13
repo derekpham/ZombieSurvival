@@ -28,6 +28,8 @@ public class DeadWorld extends World {
   Posn botRight;
   boolean hasLost;
   int tickPast;
+  List<Boss> bosses;
+  List<Bullet> enemiesBullets;
 
   // initial constructor
   DeadWorld() {
@@ -44,23 +46,27 @@ public class DeadWorld extends World {
     this.initPowerUp(1);
     this.hasLost = false;
     this.tickPast = 0;
+    this.bosses = new ArrayList<Boss>();
+    this.enemiesBullets = new ArrayList<Bullet>();
   }
 
   public void onTick() {
     if (!this.hasLost) {
       if (this.zombies.size() == 0) {
-        this.level += 1;
-        this.player.levelUp();
-        this.initZombies();
-        this.initPowerUp(2);
+        this.levelUp();
       }
 
       if (new Random().nextDouble() < 0.005) {
         this.initPowerUp(1);
       }
 
+      for (Boss boss : this.bosses) {
+        boss.attack(this.enemiesBullets);
+      }
+
       this.collisionsHandleZombiesBullets();
       this.collisionsHandleZombiesPlayer();
+      this.collisionsHandlePlayerEnemies();
       this.zombieMovementHandle();
       this.bulletMovementHandle();
       this.powerUpHandle();
@@ -69,8 +75,21 @@ public class DeadWorld extends World {
     }
   }
 
+  void levelUp() {
+    this.level += 1;
+    this.player.levelUp();
+    this.initZombies();
+    this.initPowerUp(2);
+    if (this.level == 5) {
+      this.bosses.add(new Boss(new Posn((int)(WIDTH * 0.90), HEIGHT / 2),
+              5, 0, "Carnegie", "src/carnegie.jpg"));
+
+    }
+  }
+
   void initZombies() {
     Posn halfBoundary = new Posn(WIDTH / 2, 0);
+    this.zombies = new ArrayList<Zombie>();
     while (this.zombies.size() < this.level * ZOMBIES_MULTIPLIER) {
       this.zombies.add(this.getRandomZombie(halfBoundary, this.botRight));
     }
@@ -128,6 +147,9 @@ public class DeadWorld extends World {
 
   void collisionsHandleZombiesBullets() {
     for (int bulletIdx = 0; bulletIdx < this.bullets.size(); bulletIdx += 1) {
+      if (bulletIdx <= 0) {
+        bulletIdx = 0;
+      }
       Bullet bullet = this.bullets.get(bulletIdx);
       for (int zombieIdx = 0; zombieIdx < this.zombies.size(); zombieIdx += 1) {
         Zombie zombie = this.zombies.get(zombieIdx);
@@ -137,8 +159,10 @@ public class DeadWorld extends World {
             this.zombies.remove(zombieIdx);
             zombieIdx -= 1;
           }
-          this.bullets.remove(bulletIdx);
-          bulletIdx -= 1;
+          if (bulletIdx >= 0 && bulletIdx < this.bullets.size()) {
+            this.bullets.remove(bulletIdx);
+            bulletIdx -= 1;
+          }
         }
       }
     }
@@ -174,6 +198,14 @@ public class DeadWorld extends World {
         }
       }
     }
+
+    for (int idx = 0; idx < this.enemiesBullets.size(); idx += 1) {
+      if (idx <= 0){
+        idx = 0;
+      }
+      Bullet bullet = this.enemiesBullets.get(idx);
+      bullet.move(this.obstacles);
+    }
   }
 
   void powerUpHandle() {
@@ -189,10 +221,17 @@ public class DeadWorld extends World {
 
   public void onKeyEvent(String key) {
     if (key.equals("r")) {
-      // restart world
-    } else {
+
+    } else if (key.equals("u")) {
+      this.levelUp();
+    }
+    else {
       this.player.inputMove(key, this.obstacles);
     }
+  }
+
+  void collisionsHandlePlayerEnemies() {
+
   }
 
   public void onMouseClicked(Posn pos) {
@@ -209,10 +248,6 @@ public class DeadWorld extends World {
     result.placeImageXY(new RectangleImage(WIDTH, HEIGHT, OutlineMode.SOLID, Color.GRAY),
             WIDTH / 2, HEIGHT / 2);
 
-    for (Obstacle obstacle : this.obstacles) {
-      result.placeImageXY(obstacle.render(), obstacle.getPos().x, obstacle.getPos().y);
-    }
-
     for (AbstractPowerup powerup : this.powerups) {
       result.placeImageXY(powerup.render(), powerup.getPos().x, powerup.getPos().y);
     }
@@ -225,6 +260,14 @@ public class DeadWorld extends World {
 
     for (Zombie zombie : this.zombies) {
       result.placeImageXY(zombie.render(), zombie.getPos().x, zombie.getPos().y);
+    }
+
+    for (Boss boss : this.bosses) {
+      result.placeImageXY(boss.render(), boss.getPos().x, boss.getPos().y);
+    }
+
+    for (Bullet bullet : this.enemiesBullets) {
+      result.placeImageXY(bullet.render(), bullet.getPos().x, bullet.getPos().y);
     }
 
     result.placeImageXY(new FromFileImage("src/bullet.png"),

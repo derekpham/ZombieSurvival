@@ -52,7 +52,7 @@ public class Player extends Entity {
     }
     Posn newPos = new Posn(newX, newY);
 
-    if (new Utils().isPosnValid(newPos, this.hitCircle, obstacles)) {
+    if (Utils.isPosnValid(newPos, this.hitCircle, obstacles)) {
       this.pos = newPos;
     }
   }
@@ -62,7 +62,7 @@ public class Player extends Entity {
     if (this.numAmmos > 0) {
       Double direction = Utils.getDir(this.pos, target);
       this.dir = direction;
-      bullets.add(new Bullet(this.pos, this.level, this.dir));
+      bullets.add(new Bullet(this.pos, this.level, this.dir, Color.GREEN));
       this.lastTickShot = curTick;
       this.numAmmos -= 1;
     }
