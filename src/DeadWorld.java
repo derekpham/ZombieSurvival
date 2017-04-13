@@ -41,7 +41,7 @@ public class DeadWorld extends World {
     this.botRight = new Posn(WIDTH, HEIGHT);
     this.obstacles.add(new Room(this.topLeft, this.botRight));
     this.initWalls(0);
-    this.initPowerUp(5);
+    this.initPowerUp(1);
     this.hasLost = false;
     this.tickPast = 0;
   }
@@ -52,10 +52,10 @@ public class DeadWorld extends World {
         this.level += 1;
         this.player.levelUp();
         this.initZombies();
-        this.initPowerUp(5 - this.powerups.size() - this.level);
+        this.initPowerUp(2);
       }
 
-      if (new Random().nextDouble() < .01) {
+      if (new Random().nextDouble() < 0.005) {
         this.initPowerUp(1);
       }
 
@@ -162,6 +162,9 @@ public class DeadWorld extends World {
 
   void bulletMovementHandle() {
     for (int idx = 0; idx < this.bullets.size(); idx += 1) {
+      if (idx <= 0){
+        idx = 0;
+      }
       Bullet bullet = this.bullets.get(idx);
       bullet.move(this.obstacles);
       for (Obstacle obstacle : this.obstacles) {
@@ -228,6 +231,8 @@ public class DeadWorld extends World {
             (int)(WIDTH * 0.93), (int)(HEIGHT * 0.95));
     result.placeImageXY(new TextImage(this.player.numAmmos + "", 20, Color.BLACK),
             (int)(WIDTH * 0.97), (int)(HEIGHT * 0.95));
+    result.placeImageXY(new TextImage("Level: " + this.level, 30, Color.BLACK),
+            (int)(WIDTH * 0.93), 30);
 
     return result;
   }
