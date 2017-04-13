@@ -67,6 +67,7 @@ public class DeadWorld extends World {
       this.collisionsHandleZombiesBullets();
       this.collisionsHandleZombiesPlayer();
       this.collisionsHandlePlayerEnemies();
+      this.collisionsHandleBossesBullets();
       this.zombieMovementHandle();
       this.bulletMovementHandle();
       this.powerUpHandle();
@@ -81,6 +82,7 @@ public class DeadWorld extends World {
     this.initZombies();
     this.initPowerUp(2);
     if (this.level == 5) {
+      this.bosses = new ArrayList<Boss>();
       this.bosses.add(new Boss(new Posn((int)(WIDTH * 0.90), HEIGHT / 2),
               5, 0, "Carnegie", "src/carnegie.jpg"));
 
@@ -231,7 +233,38 @@ public class DeadWorld extends World {
   }
 
   void collisionsHandlePlayerEnemies() {
+    for (int idx = 0; idx < this.enemiesBullets.size(); idx += 1) {
+      Bullet bullet = this.enemiesBullets.get(idx);
+      if (Utils.checkCollision(bullet.getPos(), bullet.attackRadius, this.player.getPos(), this.player.hitCircle)) {
+        this.player.hp -= bullet.dmg;
+        if (idx >= 0 && idx < this.enemiesBullets.size()) {
+          this.enemiesBullets.remove(idx);
+        }
+      }
+    }
+  }
 
+  void collisionsHandleBossesBullets() {
+    for (int bulletIdx = 0; bulletIdx < this.bullets.size(); bulletIdx += 1) {
+      if (bulletIdx < 0) {
+        bulletIdx = 0;
+      }
+      Bullet bullet = this.bullets.get(bulletIdx);
+      for (int bossIdx = 0; bossIdx < this.bosses.size(); bossIdx += 1) {
+        Boss boss = this.bosses.get(bossIdx);
+        if (Utils.checkCollision(boss.getPos(), boss.hitCircle, bullet.getPos(), bullet.attackRadius)) {
+          boss.hp -= bullet.dmg;
+          if (boss.hp < 0) {
+            this.bosses.remove(bossIdx);
+            bossIdx -= 1;
+          }
+          if (bulletIdx >= 0 && bulletIdx < this.bullets.size()) {
+            this.bullets.remove(bulletIdx);
+            bulletIdx -= 1;
+          }
+        }
+      }
+    }
   }
 
   public void onMouseClicked(Posn pos) {
