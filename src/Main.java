@@ -3,6 +3,9 @@ public class Main {
     DeadWorld deadWorld = new DeadWorld();
     double tickRate = 0.05;
     deadWorld.bigBang(DeadWorld.WIDTH, DeadWorld.HEIGHT, tickRate);
+    CPSound cpSound = new CPSound();
+    cpSound.run();
+
   }
 }
 

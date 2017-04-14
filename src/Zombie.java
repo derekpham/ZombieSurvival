@@ -31,7 +31,7 @@ public class Zombie extends Entity {
     } else {
       this.sightRadius = 50 * (level - 4);
     }
-    this.attackRadius = 25 + this.level;
+    this.attackRadius = 10 + this.level;
     this.hitCircle = 25;
     this.turnCounter = 0;
     this.moveSpeed = 7;

@@ -22,7 +22,7 @@ public class Player extends Entity {
 
   Player(Posn pos, int level, double direction) {
     super(pos, level, direction);
-    this.hp = 50 + this.level * 25;
+    this.hp = 50 + this.level * 100;
     this.numAmmos = 50 + this.level * 5;
     this.sightRadius = 50 + this.level * 5;
     this.attackRadius = 5 + this.level;
@@ -65,6 +65,7 @@ public class Player extends Entity {
       bullets.add(new Bullet(this.pos, this.level, this.dir, Color.GREEN));
       this.lastTickShot = curTick;
       this.numAmmos -= 1;
+      //new Thread(new MakeSound("src/gunSound.wav")).run(); TODO
     }
   }
 

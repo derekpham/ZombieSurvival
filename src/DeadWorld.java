@@ -1,5 +1,8 @@
+import java.io.*;
+import sun.audio.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -15,8 +18,8 @@ import javalib.worldimages.TextImage;
  * Created by derek on 3/17/17.
  */
 public class DeadWorld extends World {
-  final static int WIDTH = 1300;
-  final static int HEIGHT = 700;
+  final static int WIDTH = 1900;
+  final static int HEIGHT = 1000;
   final static int ZOMBIES_MULTIPLIER = 5;
   Player player;
   List<Bullet> bullets;
@@ -48,11 +51,13 @@ public class DeadWorld extends World {
     this.tickPast = 0;
     this.bosses = new ArrayList<Boss>();
     this.enemiesBullets = new ArrayList<Bullet>();
+
+
   }
 
   public void onTick() {
     if (!this.hasLost) {
-      if (this.zombies.size() == 0) {
+      if (this.zombies.size() == 0 && this.bosses.size() == 0) {
         this.levelUp();
       }
 
@@ -79,13 +84,20 @@ public class DeadWorld extends World {
   void levelUp() {
     this.level += 1;
     this.player.levelUp();
+    this.player.pos = new Posn(20, HEIGHT / 2);
     this.initZombies();
     this.initPowerUp(2);
+    this.bosses = new ArrayList<Boss>();
     if (this.level == 5) {
-      this.bosses = new ArrayList<Boss>();
       this.bosses.add(new Boss(new Posn((int)(WIDTH * 0.90), HEIGHT / 2),
               5, 0, "Carnegie", "src/carnegie.jpg"));
 
+    } else if (this.level == 10) {
+      this.bosses.add(new Boss(new Posn((int)(WIDTH * 0.90), HEIGHT / 2),
+              10, 0, "Alien", "src/alien.jpg"));
+    } else if (this.level > 14) {
+      this.bosses.add(new Boss(new Posn((int)(WIDTH * 0.90), HEIGHT / 2),
+              this.level, 0, "Death", "src/death.jpg"));
     }
   }
 
@@ -139,7 +151,7 @@ public class DeadWorld extends World {
 
   AbstractPowerup getRandomPowerUp() {
     Random r = new Random();
-    Posn randPos = new Posn(r.nextInt(WIDTH), r.nextInt(HEIGHT));
+    Posn randPos = new Posn(r.nextInt(9*WIDTH/10), r.nextInt(HEIGHT));
     if (r.nextBoolean()) {
       return new AmmoUp(randPos);
     } else {
@@ -267,6 +279,10 @@ public class DeadWorld extends World {
     }
   }
 
+  void playBGMusic() {
+
+  }
+
   public void onMouseClicked(Posn pos) {
     this.player.shoot(pos, this.bullets, this.tickPast);
   }
@@ -307,7 +323,7 @@ public class DeadWorld extends World {
             (int)(WIDTH * 0.93), (int)(HEIGHT * 0.95));
     result.placeImageXY(new TextImage(this.player.numAmmos + "", 20, Color.BLACK),
             (int)(WIDTH * 0.97), (int)(HEIGHT * 0.95));
-    result.placeImageXY(new TextImage("Level: " + this.level, 30, Color.BLACK),
+    result.placeImageXY(new TextImage("Day: " + this.level, 30, Color.BLACK),
             (int)(WIDTH * 0.93), 30);
 
     return result;

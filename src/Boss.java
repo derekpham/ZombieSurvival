@@ -14,13 +14,15 @@ public class Boss extends Entity {
 
   public Boss(Posn pos, int level, double direction, String name, String sourceFile) {
     super(pos, level, direction);
-    this.hp = this.level * 22;
+    this.hp = this.level * 30;
     this.hitCircle = 100;
     this.moveSpeed = 0;
     this.name = name;
     this.sourceFile = sourceFile;
     this.maxHP = this.hp;
-    this.hitCircle = 50;
+    if (this.level > 14) {
+      this.hitCircle = 100;
+    }
   }
 
   @Override
@@ -30,12 +32,16 @@ public class Boss extends Entity {
 
   @Override
   WorldImage render() {
-    return new AboveImage(this.renderHP(), new FromFileImage(this.sourceFile));
+    WorldImage image = new FromFileImage(this.sourceFile);
+    if (this.sourceFile.equals("src/alien.jpg")) {
+      image = new ScaleImage(image, 0.5);
+    }
+    return new AboveImage(this.renderHP(), image);
   }
 
   WorldImage renderHP() {
-    return new OverlayImage(new RectangleImage((int) (190 * (1.0 * this.hp) / this.maxHP), 5, OutlineMode.SOLID, Color.RED),
-            new RectangleImage(20, 5, OutlineMode.OUTLINE, Color.BLACK));
+    return new OverlayImage(new RectangleImage((int) (190 * (1.0 * this.hp) / this.maxHP), 12, OutlineMode.SOLID, Color.RED),
+            new RectangleImage(190, 12, OutlineMode.OUTLINE, Color.BLACK));
   }
 
   void attack(List<Bullet> bullets) {
